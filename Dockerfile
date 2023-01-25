@@ -1,7 +1,7 @@
 FROM node:16.19.0-alpine3.17
 
-RUN npm i
+RUN yarn install
 
-RUN npm run build
+RUN yarn build
 
-CMD [ "npm", "run", "start" ]
+CMD [ "yarn", "start" ]
