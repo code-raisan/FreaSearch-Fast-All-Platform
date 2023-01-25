@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  frea:
+    build: api-server
+    restart: always
+    ports:
+      - "127.0.0.1:10001:8000"
+    environment:
+      - FREA_DEBUG_MODE=false
+      #- FREA_PROXY_0=socks5h://127.0.0.1:9050
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=frea
+      - POSTGRES_USER=frea
+      - POSTGRES_PASSWD=MeaningOfLife
+    links:
+      - db
+    volumes:
+      - ./tmp/mecab:/app/mecab
+
+  ui:
+    build: frea-ui
+    restart: always
+    ports:
+      - "127.0.0.1:10002:3000"
+    environment:
+      - NEXT_TELEMETRY_DISABLED=1
+      - API_URL=https://api.freasearch.org
+
+  db:
+    restart: always
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=frea
+      - POSTGRES_USER=frea
+      - POSTGRES_PASSWORD=MeaningOfLife
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
